@@ -64,9 +64,15 @@ if __name__ == '__main__':
         df = pd.read_csv('./stock_data/daily/{code}_daily.csv'.format(code=i), index_col='日期', parse_dates=True,
                          na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
 
-        price = golden_death(df)
-        stock_individual_info_em_df = ak.stock_individual_info_em(symbol="{code}".format(code=i))
-        stock_name = str(stock_individual_info_em_df.values[5][1])
+        try:
+            price = golden_death(df)
+        except:
+            price = "None"
+        try:
+            stock_individual_info_em_df = ak.stock_individual_info_em(symbol="{code}".format(code=i))
+            stock_name = str(stock_individual_info_em_df.values[5][1])
+        except:
+            stock_name = "None"
         # 打开数据库连接
         db = pymysql.connect(host='localhost',
                              user='root',
