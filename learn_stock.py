@@ -106,7 +106,11 @@ if __name__ == '__main__':
     # 4955只股票，13只股票没代码
     # 获取股票数据
     stock = StockData(period='monthly', save='True')
-    stock_code = stock.stock_code_list()
-    for i in stock_code:
-        stock.stock_data_info(symbol='{code}'.format(code=i))
+    # stock_code = stock.stock_code_list()
+    # for i in stock_code:
+    #     stock.stock_data_info(symbol='{code}'.format(code=i))
+    import akshare as ak
+
+    stock_zh_a_minute_df = ak.stock_zh_a_minute(symbol='sh600751', period='1', adjust="qfq")
+    print(stock_zh_a_minute_df)
 
