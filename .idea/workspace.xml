@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18f10466-75e9-472a-872e-55a56c073566" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tes.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/golden_death_cross.py" beforeDir="false" afterPath="$PROJECT_DIR$/golden_death_cross.py" afterDir="false" />
     </list>
@@ -59,7 +58,12 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected="Python.golden_death_cross">
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.learn_stock">
     <configuration default="true" type="PythonConfigurationType" factoryName="Python">
       <module name="learn_stock" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -105,9 +109,6 @@
       <module name="learn_stock" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -123,10 +124,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="tes" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="learn_stock" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/tes.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.golden_death_cross" />
         <item itemvalue="Python.learn_stock" />
+        <item itemvalue="Python.tes" />
+        <item itemvalue="Python.golden_death_cross" />
       </list>
     </recent_temporary>
   </component>
@@ -142,7 +163,7 @@
       <workItem from="1652548764306" duration="279000" />
       <workItem from="1652549057642" duration="6731000" />
       <workItem from="1652556566347" duration="2167000" />
-      <workItem from="1652558825484" duration="513000" />
+      <workItem from="1652558825484" duration="3995000" />
     </task>
     <servers />
   </component>

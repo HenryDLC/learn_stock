@@ -52,44 +52,39 @@ def golden_death(df):
 
 
 if __name__ == '__main__':
-    import os
 
-    file_dir_daily = './stock_data/daily'
-    os_code_list_daily = []
-    for root, dirs, files in os.walk(file_dir_daily, topdown=False):
-        for file in files:
-            os_code_list_daily.append(file[:6])
+    try:
+        df = pd.read_csv('./stock_data/daily/600672_daily.csv', index_col='日期', parse_dates=True,
+                         na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
+        price = golden_death(df)
+        print(price)
 
-    for i in os_code_list_daily:
-        try:
-            df = pd.read_csv('./stock_data/daily/{code}_daily.csv'.format(code=i), index_col='日期', parse_dates=True,
-                             na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
-            price = golden_death(df)
+    except:
+        price = "None"
 
-        except:
-            price = "None"
-        try:
-            stock_individual_info_em_df = ak.stock_individual_info_em(symbol="{code}".format(code=i))
-            stock_name = str(stock_individual_info_em_df.values[5][1])
-        except:
-            stock_name = "None"
-        # 打开数据库连接
-        db = pymysql.connect(host='localhost',
-                             user='root',
-                             password='707116148',
-                             database='golden_ma')
-        cursor = db.cursor()
-        # SQL 插入语句
-        sql = """INSERT INTO golden(stockname,stockcode,price)VALUES ('{stockname}','{stockcode}','{price}')""".format(
-            stockname=stock_name, stockcode=i, price=price)
-        try:
-            # 执行sql语句
-            cursor.execute(sql)
-            # 提交到数据库执行
-            db.commit()
-        except:
-            # 如果发生错误则回滚
-            db.rollback()
+    try:
+        stock_individual_info_em_df = ak.stock_individual_info_em(symbol="{code}".format(code=i))
+        stock_name = str(stock_individual_info_em_df.values[5][1])
+    except:
+        stock_name = "None"
 
-        # 关闭数据库连接
-        db.close()
+    # # 打开数据库连接
+    # db = pymysql.connect(host='localhost',
+    #                      user='root',
+    #                      password='707116148',
+    #                      database='golden_ma')
+    # cursor = db.cursor()
+    # # SQL 插入语句
+    # sql = """INSERT INTO golden(stockname,stockcode,price)VALUES ('{stockname}','{stockcode}','{price}')""".format(
+    #     stockname=stock_name, stockcode=i, price=price)
+    # try:
+    #     # 执行sql语句
+    #     cursor.execute(sql)
+    #     # 提交到数据库执行
+    #     db.commit()
+    # except:
+    #     # 如果发生错误则回滚
+    #     db.rollback()
+    #
+    # # 关闭数据库连接
+    # db.close()

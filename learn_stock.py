@@ -111,6 +111,7 @@ if __name__ == '__main__':
     #     stock.stock_data_info(symbol='{code}'.format(code=i))
     import akshare as ak
 
-    stock_zh_a_minute_df = ak.stock_zh_a_minute(symbol='sh600751', period='1', adjust="qfq")
-    print(stock_zh_a_minute_df)
+    stock_zh_a_hist_min_em_df = ak.stock_zh_a_hist_min_em(symbol="000001", start_date="2021-09-01 09:32:00",
+                                                          end_date="2021-09-06 09:32:00", period='1', adjust='')
+    print(stock_zh_a_hist_min_em_df)
 
