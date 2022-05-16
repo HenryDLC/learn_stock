@@ -1,4 +1,3 @@
-import pandas
 import pandas as pd
 import akshare as ak
 import datetime
