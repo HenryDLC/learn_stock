@@ -6263,13 +6263,8 @@
       <change afterPath="$PROJECT_DIR$/stock_data/weekly/837242_weekly.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/stock_data/weekly/838163_weekly.csv" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/stock_data/weekly/871245_weekly.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/learn_stock.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/learn_stock.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DataFrameReadCsv_import_mysql.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataFrameReadCsv_import_mysql.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/learn_stock.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/learn_stock.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/learn_stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn_stock.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pandas.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/pandas.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tes.py" beforeDir="false" afterPath="$PROJECT_DIR$/tes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -6490,7 +6485,7 @@
       <workItem from="1652558825484" duration="16561000" />
       <workItem from="1652710626651" duration="10248000" />
       <workItem from="1652878151469" duration="87000" />
-      <workItem from="1652878245945" duration="11656000" />
+      <workItem from="1652878245945" duration="12772000" />
     </task>
     <servers />
   </component>
