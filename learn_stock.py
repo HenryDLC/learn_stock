@@ -146,14 +146,16 @@ if __name__ == '__main__':
             local_stock_code = weekly_local_stock_code
         elif i == 'monthly':
             local_stock_code = monthly_local_stock_code
+
+        print(list(set(local_stock_code).difference(chinese_stock_code)))
+
         # 获取新股票数据
         for code in local_stock_code:
             stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
                                   header=True)
+        del stock
 
-        # 更新今日数据
-        for code in chinese_stock_code:
-            stock.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
-                                  header=False)
         # 保存到数据库
-        save_stockdata_mysql(i)
+        save_stockdata_mysql(i).run()
+        del stock
+
