@@ -72,8 +72,11 @@ class StockData(object):
             print('-'*100)
             self.error_getcode_list.append(symbol)
             # print('获取失败股票代码：', self.error_writecode_list, self.period)
-            print("败股票代码获取失败")
+            print(symbol)
+            print(stock_data)
+            print("股票数据获取失败")
             print(e)
+            print('-'*100)
             
 
 
@@ -151,9 +154,11 @@ class StockData(object):
             self.error_getcode_list.append(symbol)
             print('*'*100)
             print(e)
-            print("写入股票代码失败")
+            print("写入股票数据失败")
             self.error_writecode_list.append(symbol)
             # print('写入失败股票代码：', self.error_writecode_list, self.period)
+            print('*'*100)
+
 
 
 # period='daily'; choice of {'daily', 'weekly', 'monthly'}
