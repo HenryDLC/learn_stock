@@ -67,7 +67,6 @@ class StockData(object):
             print('-' * 100)
             self.error_getcode_list.append(symbol)
             print(symbol)
-            print(stock_data)
             print("股票数据获取失败")
             print(e)
             print('-' * 100)
@@ -149,8 +148,15 @@ class StockData(object):
             print(e)
             print("写入股票数据失败")
             self.error_writecode_list.append(symbol)
-            # print('写入失败股票代码：', self.error_writecode_list, self.period)
             print('*' * 100)
+
+    def error_stock_code(self):
+        if len(self.error_getcode_list) > 0:
+            error_get_stock_code = pd.DataFrame({"save_error_stock_code": self.error_getcode_list})
+            error_get_stock_code.to_csv("./log/error_get_stock_code.csv")
+        if len(self.error_writecode_list) > 0:
+            error_write_stock_code = pd.DataFrame({"error_write_stock_code": self.error_writecode_list})
+            error_write_stock_code.to_csv("./log/error_write_stock_code.csv")
 
 
 # period='daily'; choice of {'daily', 'weekly', 'monthly'}
@@ -183,12 +189,33 @@ if __name__ == '__main__':
             return no_local_stock_code
 
 
+        import queue
+
+
         # 获取新股票数据
         def get_new_stock():
+            # q = queue.Queue()
             no_local_stock_code = get_no_local_stock_code()
             for code in no_local_stock_code:
+                # q.put(code)
                 stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
                                       header=True)
+
+            # from multiprocessing.pool import ThreadPool
+            # pool = ThreadPool(8)
+            #
+            # def task1(code_queue):
+            #     stock.stock_data_info(symbol='{code}'.format(code=code_queue), start_date='19890101', end_date=today,
+            #                           header=True)
+            #
+            # if q.qsize() > 0:
+            #     pool.apply_async(task1, args=q.get())
+            # print("任务提交完成")
+            # pool.close()
+            # pool.join()
+            # print("任务完成")
+
+            # stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today, header=True)
 
 
         # 获取更新数据
@@ -206,6 +233,7 @@ if __name__ == '__main__':
         get_new_stock()
         get_update_stock()
 
+        stock.error_stock_code()
         del stock
 
         # 保存到数据库
