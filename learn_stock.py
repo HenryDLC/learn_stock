@@ -60,7 +60,7 @@ class StockData(object):
                 stock_data = ak.stock_zh_a_hist(symbol, self.period, start_date, end_date, self.adjust)
                 if self.save == "True":
                     self.save_data_csv(symbol, stock_data, header)
-                    
+
                 return symbol, stock_data
 
             # elif self.period in ['1', '5', '15', '30', '60']:
@@ -69,16 +69,14 @@ class StockData(object):
             #         self.save_data_csv(symbol, stock_data)
             #     return symbol, stock_data
         except Exception as e:
-            print('-'*100)
+            print('-' * 100)
             self.error_getcode_list.append(symbol)
             # print('获取失败股票代码：', self.error_writecode_list, self.period)
             print(symbol)
             print(stock_data)
             print("股票数据获取失败")
             print(e)
-            print('-'*100)
-            
-
+            print('-' * 100)
 
     # 保存数据到csv文件
     def save_data_csv(self, symbol, stock_data, header=True):
@@ -86,79 +84,82 @@ class StockData(object):
         try:
             if self.period == 'daily':
                 try:
-                    df = pd.read_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
-                    index_col='日期', parse_dates=True,
-                                    na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+                    df = pd.read_csv(
+                        file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                        index_col='日期', parse_dates=True,
+                        na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
 
                     if today > df.index:
-                        # stock_data = ak.stock_zh_a_hist('000001', 'daily', update_date, today, adjust='')
                         stock_data = self.stock_data_info(update_date, today, symbol, header=True)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
                         # stock_data = pd.concat([df, stock_data])
-                        stock_data.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
-                         mode='a', header=False, index=True)
+                        stock_data.to_csv(
+                            file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                            mode='a', header=False, index=True)
                 except Exception as e:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
                     # df = self.stock_data_info('19000101', today, symbol, header=True)                    
-                    stock_data.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
-                    mode='a', header=True, index=False)
+                    stock_data.to_csv(
+                        file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                        mode='a', header=True, index=False)
             elif self.period == 'weekly':
                 try:
-                    df = pd.read_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
-                    index_col='日期', parse_dates=True,
-                                    na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+                    df = pd.read_csv(
+                        file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                        index_col='日期', parse_dates=True,
+                        na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
 
                     if today > df.index:
-                        # stock_data = ak.stock_zh_a_hist('000001', 'daily', update_date, today, adjust='')
                         stock_data = self.stock_data_info(update_date, today, symbol, header=True)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
                         # stock_data = pd.concat([df, stock_data])
-                        stock_data.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
-                         mode='a', header=False, index=True)
+                        stock_data.to_csv(
+                            file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                            mode='a', header=False, index=True)
                 except:
-                    # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    # df = self.stock_data_info('19000101', today, symbol, header=True)
-                    stock_data.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
-                    mode='a', header=True, index=False)
+                    stock_data.to_csv(
+                        file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                        mode='a', header=True, index=False)
 
             elif self.period == 'monthly':
                 try:
-                    df = pd.read_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
-                    index_col='日期', parse_dates=True,
-                                    na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+                    df = pd.read_csv(
+                        file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                        index_col='日期', parse_dates=True,
+                        na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
 
                     if today > df.index:
-                        # stock_data = ak.stock_zh_a_hist('000001', 'daily', update_date, today, adjust='')
                         stock_data = self.stock_data_info(update_date, today, symbol, header=True)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
                         # stock_data = pd.concat([df, stock_data])
-                        stock_data.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
-                         mode='a', header=False, index=True)
+                        stock_data.to_csv(
+                            file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                            mode='a', header=False, index=True)
                 except:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
                     # df = self.stock_data_info('19000101', today, symbol, header=True)
-                    stock_data.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
-                    mode='a', header=True, index=False)
+                    stock_data.to_csv(
+                        file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                        mode='a', header=True, index=False)
             print(symbol, '', 'save ok')
 
         except Exception as e:
             self.error_getcode_list.append(symbol)
-            print('*'*100)
+            print('*' * 100)
             print(e)
             print("写入股票数据失败")
             self.error_writecode_list.append(symbol)
             # print('写入失败股票代码：', self.error_writecode_list, self.period)
-            print('*'*100)
-
+            print('*' * 100)
 
 
 # period='daily'; choice of {'daily', 'weekly', 'monthly'}
@@ -173,6 +174,7 @@ if __name__ == '__main__':
         # A股市场代码
         chinese_stock_code = stock.stock_code_list()
 
+
         # 本地没有的股票数据
         def get_no_local_stock_code():
             daily_local_stock_code, weekly_local_stock_code, monthly_local_stock_code = stock.local_stock_code(
@@ -185,16 +187,18 @@ if __name__ == '__main__':
                 no_local_stock_code = weekly_local_stock_code
             elif i == 'monthly':
                 no_local_stock_code = monthly_local_stock_code
-            
+
             # print(list(set(no_local_stock_code).difference(chinese_stock_code)))
             return no_local_stock_code
-        
+
+
         # 获取新股票数据
         def get_new_stock():
             no_local_stock_code = get_no_local_stock_code()
             for code in no_local_stock_code:
                 stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
-                                    header=True)
+                                      header=True)
+
 
         # 获取更新数据
         def get_update_stock():
@@ -202,11 +206,12 @@ if __name__ == '__main__':
             if no_local_stock_code == chinese_stock_code:
                 for code in chinese_stock_code:
                     stock.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
-                                        header=True)
-                    
+                                          header=True)
+
             else:
                 get_new_stock()
-        
+
+
         get_new_stock()
         get_update_stock()
 
@@ -215,5 +220,3 @@ if __name__ == '__main__':
         # 保存到数据库
         # save_stockdata_mysql(i).run()
         # del stock
-        
-	
