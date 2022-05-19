@@ -96,9 +96,7 @@ class StockData(object):
                          mode='a', header=False, index=True)
                 except Exception as e:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    # df = self.stock_data_info('19000101', today, symbol, header=True)
-                    print(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period))
-                    
+                    # df = self.stock_data_info('19000101', today, symbol, header=True)                    
                     stock_data.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
                     mode='a', header=True, index=False)
             elif self.period == 'weekly':
@@ -120,7 +118,7 @@ class StockData(object):
                 except:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
                     # df = self.stock_data_info('19000101', today, symbol, header=True)
-                    df.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
+                    stock_data.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
                     mode='a', header=True, index=False)
 
             elif self.period == 'monthly':
@@ -142,7 +140,7 @@ class StockData(object):
                 except:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
                     # df = self.stock_data_info('19000101', today, symbol, header=True)
-                    df.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
+                    stock_data.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
                     mode='a', header=True, index=False)
             print(symbol, '', 'save ok')
 
