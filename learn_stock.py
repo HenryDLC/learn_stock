@@ -73,49 +73,69 @@ class StockData(object):
         try:
             if self.period == 'daily':
                 try:
-                    df = pd.read_csv(
-                        "./stock_data/daily/{symbol}_{period}.csv".format(symbol=symbol, period=self.period))
-                    frames = [df, stock_data]
-                    result = pd.concat(frames)
-                    # 查重
-                    result.drop_duplicates(subset=None, keep='first', inplace=False)
-                    result.to_csv("./stock_data/daily/{symbol}_{period}.csv".format(symbol=symbol, period=self.period),
-                                  mode='a', header=header, index=False)
+                    df = pd.read_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
+                    index_col='日期', parse_dates=True,
+                                    na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+                    # 更新起止时间
+                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
+
+                    if today > df.index:
+                        # stock_data = ak.stock_zh_a_hist('000001', 'daily', update_date, today, adjust='')
+                        stock_data = self.stock_data_info(update_date, today, symbol, header=True)
+                        stock_data['日期'] = pd.to_datetime(stock_data['日期'])
+                        stock_data.set_index(['日期'], inplace=True)
+                        # stock_data = pd.concat([df, stock_data])
+                        stock_data.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                         mode='a', header=False, index=True)
                 except:
-                    stock_data.to_csv(
-                        "./stock_data/daily/{symbol}_{period}.csv".format(symbol=symbol, period=self.period),
-                        mode='a', header=header, index=None)
+                    # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
+                    df = self.stock_data_info('19000101', today, symbol, header=True)
+                    df.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
+                    mode='a', header=True, index=False)
 
             elif self.period == 'weekly':
                 try:
-                    df = pd.read_csv(
-                        "./stock_data/weekly/{symbol}_{period}.csv".format(symbol=symbol, period=self.period))
-                    frames = [df, stock_data]
-                    result = pd.concat(frames)
-                    # 查重
-                    result.drop_duplicates(subset=None, keep='first', inplace=False)
-                    result.to_csv("./stock_data/weekly/{symbol}_{period}.csv".format(symbol=symbol, period=self.period),
-                                  mode='a', header=header, index=False)
+                    df = pd.read_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
+                    index_col='日期', parse_dates=True,
+                                    na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+                    # 更新起止时间
+                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
+
+                    if today > df.index:
+                        # stock_data = ak.stock_zh_a_hist('000001', 'daily', update_date, today, adjust='')
+                        stock_data = self.stock_data_info(update_date, today, symbol, header=True)
+                        stock_data['日期'] = pd.to_datetime(stock_data['日期'])
+                        stock_data.set_index(['日期'], inplace=True)
+                        # stock_data = pd.concat([df, stock_data])
+                        stock_data.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                         mode='a', header=False, index=True)
                 except:
-                    stock_data.to_csv(
-                        "./stock_data/weekly/{symbol}_{period}.csv".format(symbol=symbol, period=self.period),
-                        mode='a', header=header, index=None)
+                    # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
+                    df = self.stock_data_info('19000101', today, symbol, header=True)
+                    df.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
+                    mode='a', header=True, index=False)
+
             elif self.period == 'monthly':
                 try:
-                    df = pd.read_csv(
-                        "./stock_data/monthly/{symbol}_{period}.csv".format(symbol=symbol, period=self.period))
-                    frames = [df, stock_data]
-                    result = pd.concat(frames)
-                    # 查重
-                    result.drop_duplicates(subset=None, keep='first', inplace=False)
-                    result.to_csv(
-                        "./stock_data/monthly/{symbol}_{period}.csv".format(symbol=symbol, period=self.period),
-                        mode='a', header=header, index=False)
+                    df = pd.read_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
+                    index_col='日期', parse_dates=True,
+                                    na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+                    # 更新起止时间
+                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
+
+                    if today > df.index:
+                        # stock_data = ak.stock_zh_a_hist('000001', 'daily', update_date, today, adjust='')
+                        stock_data = self.stock_data_info(update_date, today, symbol, header=True)
+                        stock_data['日期'] = pd.to_datetime(stock_data['日期'])
+                        stock_data.set_index(['日期'], inplace=True)
+                        # stock_data = pd.concat([df, stock_data])
+                        stock_data.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
+                         mode='a', header=False, index=True)
                 except:
-                    stock_data.to_csv(
-                        "./stock_data/monthly/{symbol}_{period}.csv".format(symbol=symbol, period=self.period),
-                        mode='a',
-                        header=header, index=None)
+                    # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
+                    df = self.stock_data_info('19000101', today, symbol, header=True)
+                    df.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
+                    mode='a', header=True, index=False)
             print(symbol, '', 'save ok')
 
         except:
