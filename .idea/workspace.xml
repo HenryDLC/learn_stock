@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="18f10466-75e9-472a-872e-55a56c073566" name="变更" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/learn_stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/learn_stock.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +62,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.tes">
+  <component name="RunManager" selected="Python.learn_stock">
     <configuration name="DataFrameReadCsv_import_daily_mysql" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="learn_stock" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -154,9 +155,6 @@
       <module name="learn_stock" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -203,9 +201,9 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.learn_stock" />
         <item itemvalue="Python.tes" />
         <item itemvalue="Python.DataFrameReadCsv_import_mysql" />
-        <item itemvalue="Python.learn_stock" />
         <item itemvalue="Python.DataFrameReadCsv_import_weekly_mysql" />
         <item itemvalue="Python.DataFrameReadCsv_import_daily_mysql" />
       </list>
@@ -226,7 +224,7 @@
       <workItem from="1652558825484" duration="16561000" />
       <workItem from="1652710626651" duration="10248000" />
       <workItem from="1652878151469" duration="87000" />
-      <workItem from="1652878245945" duration="12839000" />
+      <workItem from="1652878245945" duration="13465000" />
     </task>
     <servers />
   </component>

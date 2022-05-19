@@ -63,15 +63,9 @@ class StockData(object):
 
                 return symbol, stock_data
 
-            # elif self.period in ['1', '5', '15', '30', '60']:
-            #     stock_data = pd.DataFrame({'one': '目前不支持分时数据'})
-            #     if self.save == "True":
-            #         self.save_data_csv(symbol, stock_data)
-            #     return symbol, stock_data
         except Exception as e:
             print('-' * 100)
             self.error_getcode_list.append(symbol)
-            # print('获取失败股票代码：', self.error_writecode_list, self.period)
             print(symbol)
             print(stock_data)
             print("股票数据获取失败")
@@ -95,13 +89,10 @@ class StockData(object):
                         stock_data = self.stock_data_info(update_date, today, symbol, header=True)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
-                        # stock_data = pd.concat([df, stock_data])
                         stock_data.to_csv(
                             file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                             mode='a', header=False, index=True)
                 except Exception as e:
-                    # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    # df = self.stock_data_info('19000101', today, symbol, header=True)                    
                     stock_data.to_csv(
                         file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                         mode='a', header=True, index=False)
