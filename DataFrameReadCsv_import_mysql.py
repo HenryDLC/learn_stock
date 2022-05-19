@@ -60,5 +60,5 @@ class save_stockdata_mysql(object):
         print(self.error_code)
 
 
-test = save_stockdata_mysql('daily')
-test.run()
+# test = save_stockdata_mysql('daily')
+# test.run()

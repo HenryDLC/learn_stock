@@ -3,6 +3,7 @@ import akshare as ak
 import datetime
 import os
 from DataFrameReadCsv_import_mysql import save_stockdata_mysql
+from time import sleep
 
 file_dir_daily = './stock_data/daily'
 file_dir_weekly = './stock_data/weekly'
@@ -56,16 +57,22 @@ class StockData(object):
                 stock_data = ak.stock_zh_a_hist(symbol, self.period, start_date, end_date, self.adjust)
                 if self.save == "True":
                     self.save_data_csv(symbol, stock_data, header)
+                    
                 return symbol, stock_data
 
-            elif self.period in ['1', '5', '15', '30', '60']:
-                stock_data = pd.DataFrame({'one': '目前不支持分时数据'})
-                if self.save == "True":
-                    self.save_data_csv(symbol, stock_data)
-                return symbol, stock_data
-        except:
+            # elif self.period in ['1', '5', '15', '30', '60']:
+            #     stock_data = pd.DataFrame({'one': '目前不支持分时数据'})
+            #     if self.save == "True":
+            #         self.save_data_csv(symbol, stock_data)
+            #     return symbol, stock_data
+        except Exception as e:
+            print('-'*100)
             self.error_getcode_list.append(symbol)
-            print('获取失败股票代码：', self.error_writecode_list, self.period)
+            # print('获取失败股票代码：', self.error_writecode_list, self.period)
+            print("败股票代码获取失败")
+            print(e)
+            
+
 
     # 保存数据到csv文件
     def save_data_csv(self, symbol, stock_data, header=True):
@@ -87,12 +94,13 @@ class StockData(object):
                         # stock_data = pd.concat([df, stock_data])
                         stock_data.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                          mode='a', header=False, index=True)
-                except:
+                except Exception as e:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    df = self.stock_data_info('19000101', today, symbol, header=True)
-                    df.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
+                    # df = self.stock_data_info('19000101', today, symbol, header=True)
+                    print(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period))
+                    
+                    stock_data.to_csv(file_dir_daily + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
                     mode='a', header=True, index=False)
-
             elif self.period == 'weekly':
                 try:
                     df = pd.read_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol,period=self.period), 
@@ -111,7 +119,7 @@ class StockData(object):
                          mode='a', header=False, index=True)
                 except:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    df = self.stock_data_info('19000101', today, symbol, header=True)
+                    # df = self.stock_data_info('19000101', today, symbol, header=True)
                     df.to_csv(file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
                     mode='a', header=True, index=False)
 
@@ -133,14 +141,18 @@ class StockData(object):
                          mode='a', header=False, index=True)
                 except:
                     # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    df = self.stock_data_info('19000101', today, symbol, header=True)
+                    # df = self.stock_data_info('19000101', today, symbol, header=True)
                     df.to_csv(file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period), 
                     mode='a', header=True, index=False)
             print(symbol, '', 'save ok')
 
-        except:
+        except Exception as e:
+            self.error_getcode_list.append(symbol)
+            print('*'*100)
+            print(e)
+            print("写入股票代码失败")
             self.error_writecode_list.append(symbol)
-            print('写入失败股票代码：', self.error_writecode_list, self.period)
+            # print('写入失败股票代码：', self.error_writecode_list, self.period)
 
 
 # period='daily'; choice of {'daily', 'weekly', 'monthly'}
@@ -155,24 +167,44 @@ if __name__ == '__main__':
         stock = StockData(period=i, save='True')
         # A股市场代码
         chinese_stock_code = stock.stock_code_list()
+
         # 本地没有的股票数据
-        daily_local_stock_code, weekly_local_stock_code, monthly_local_stock_code = stock.local_stock_code(
-            chinese_stock_code)
+        def get_no_local_stock_code():
+            daily_local_stock_code, weekly_local_stock_code, monthly_local_stock_code = stock.local_stock_code(
+                chinese_stock_code)
 
-        local_stock_code = []
-        if i == 'daily':
-            local_stock_code = daily_local_stock_code
-        elif i == 'weekly':
-            local_stock_code = weekly_local_stock_code
-        elif i == 'monthly':
-            local_stock_code = monthly_local_stock_code
-
-        # print(list(set(local_stock_code).difference(chinese_stock_code)))
-
+            no_local_stock_code = []
+            if i == 'daily':
+                no_local_stock_code = daily_local_stock_code
+            elif i == 'weekly':
+                no_local_stock_code = weekly_local_stock_code
+            elif i == 'monthly':
+                no_local_stock_code = monthly_local_stock_code
+            
+            # print(list(set(no_local_stock_code).difference(chinese_stock_code)))
+            return no_local_stock_code
+        
         # 获取新股票数据
-        for code in local_stock_code:
-            stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
-                                  header=True)
+        def get_new_stock():
+            no_local_stock_code = get_no_local_stock_code()
+            for code in no_local_stock_code:
+                stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
+                                    header=True)
+
+        # 获取更新数据
+        def get_update_stock():
+            no_local_stock_code = get_no_local_stock_code()
+            if no_local_stock_code == chinese_stock_code:
+                for code in chinese_stock_code:
+                    stock.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
+                                        header=True)
+                    
+            else:
+                get_new_stock()
+        
+        get_new_stock()
+        get_update_stock()
+
         del stock
 
         # 保存到数据库
