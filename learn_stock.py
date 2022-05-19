@@ -5,6 +5,9 @@ import os
 from DataFrameReadCsv_import_mysql import save_stockdata_mysql
 from time import sleep
 
+# 今日日期
+today = '20' + str(datetime.date.today().strftime('%y%m%d'))
+
 file_dir_daily = './stock_data/daily'
 file_dir_weekly = './stock_data/weekly'
 file_dir_monthly = './stock_data/monthly'
@@ -157,8 +160,7 @@ class StockData(object):
 if __name__ == '__main__':
     # 4955只股票，13只股票没代码
     # 获取股票数据
-    # 今日日期
-    today = '20' + str(datetime.date.today().strftime('%y%m%d'))
+
     date = ['daily', 'weekly', 'monthly']
 
     for i in date:
