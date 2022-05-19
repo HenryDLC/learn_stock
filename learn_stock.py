@@ -167,7 +167,7 @@ if __name__ == '__main__':
         elif i == 'monthly':
             local_stock_code = monthly_local_stock_code
 
-        print(list(set(local_stock_code).difference(chinese_stock_code)))
+        # print(list(set(local_stock_code).difference(chinese_stock_code)))
 
         # 获取新股票数据
         for code in local_stock_code:
@@ -178,4 +178,5 @@ if __name__ == '__main__':
         # 保存到数据库
         # save_stockdata_mysql(i).run()
         # del stock
-
+        
+	
