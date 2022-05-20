@@ -5,8 +5,6 @@ import datetime
 from time import sleep
 
 
-
-
 class save_stockdata_mysql(object):
     def __init__(self, date):
         self.date = date
@@ -14,7 +12,8 @@ class save_stockdata_mysql(object):
 
         stock_daily_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_daily?charset=utf8mb4')
         stock_weekly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_weekly?charset=utf8mb4')
-        stock_monthly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
+        stock_monthly_conn = create_engine(
+            'mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
 
         file_dir_daily = './stock_data/daily'
         file_dir_weekly = './stock_data/weekly'
@@ -34,9 +33,6 @@ class save_stockdata_mysql(object):
         for root, dirs, files in os.walk(file_dir_monthly, topdown=False):
             for file in files:
                 os_code_list_monthly.append(file[:14])
-
-
-
 
         if self.date == 'daily':
             self.file_dir = file_dir_daily
@@ -60,10 +56,10 @@ class save_stockdata_mysql(object):
         for i in self.os_code_list:
             try:
                 df_csv = pd.read_csv('./stock_data/daily/{}.csv'.format(i), index_col='日期', parse_dates=True,
-                             na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
+                                     na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
 
                 try:
-                    df_sql= pd.read_sql('select * from {table_name}'.format(table_name =i), con=self.engine)
+                    df_sql = pd.read_sql('select * from {table_name}'.format(table_name=i), con=self.engine)
                     df_sql_data = df_sql.tail(1)
                     df_sql_data = pd.to_datetime(df_sql_data.index, unit='D')
 
@@ -73,11 +69,10 @@ class save_stockdata_mysql(object):
                         raise BaseException("df_sql_date_zero")
                     if bool(self.today > df_sql_data):
                         df_csv[update_date::].to_sql(str(i), con=self.engine, if_exists='append')
-                        
+
                 except Exception as e:
                     print(e)
                     df_csv.to_sql(str(i), con=self.engine, if_exists='replace')
-                
 
                 print('Write to MySQL successfully: ', i)
             except Exception as e:
