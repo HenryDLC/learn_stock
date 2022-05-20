@@ -201,33 +201,12 @@ if __name__ == '__main__':
             return no_local_stock_code
 
 
-        import queue
-
-
         # 获取新股票数据
         def get_new_stock():
-            # q = queue.Queue()
             no_local_stock_code = get_no_local_stock_code()
             for code in no_local_stock_code:
-                # q.put(code)
                 stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
                                       header=True)
-
-            # from multiprocessing.pool import ThreadPool
-            # pool = ThreadPool(8)
-            #
-            # def task1(code_queue):
-            #     stock.stock_data_info(symbol='{code}'.format(code=code_queue), start_date='19890101', end_date=today,
-            #                           header=True)
-            #
-            # if q.qsize() > 0:
-            #     pool.apply_async(task1, args=q.get())
-            # print("任务提交完成")
-            # pool.close()
-            # pool.join()
-            # print("任务完成")
-
-            # stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today, header=True)
 
 
         # 获取更新数据
@@ -247,18 +226,19 @@ if __name__ == '__main__':
                 for code in chinese_stock_code:
                     stock.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
                                           header=True)
-
             else:
                 get_new_stock()
 
 
-        #
         get_new_stock()
         get_update_stock()
-
-        # stock.error_stock_code()
+        stock.error_stock_code()
         del stock
 
         # 保存到数据库
         save_stockdata_mysql(i).run()
         # del stock
+
+# TODO 多线程版本
+# TODO 记录log日志 定位错误
+# TODO 除虫 代码封装完整，解耦

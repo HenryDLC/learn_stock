@@ -2,7 +2,6 @@ import pandas as pd
 from sqlalchemy import create_engine
 import os
 import datetime
-from time import sleep
 
 
 class save_stockdata_mysql(object):
@@ -14,11 +13,10 @@ class save_stockdata_mysql(object):
         # stock_weekly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_weekly?charset=utf8mb4')
         # stock_monthly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
 
-
         stock_daily_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_daily?charset=utf8mb4')
         stock_weekly_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_weekly?charset=utf8mb4')
-        stock_monthly_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_monthly?charset=utf8mb4')
-
+        stock_monthly_conn = create_engine(
+            'mysql+pymysql://root:707116148@localhost:3306/stock_monthly?charset=utf8mb4')
 
         file_dir_daily = './stock_data/daily'
         file_dir_weekly = './stock_data/weekly'
@@ -60,7 +58,8 @@ class save_stockdata_mysql(object):
     def run(self):
         for i in self.os_code_list:
             try:
-                df_csv = pd.read_csv('{file_dir}/{code}.csv'.format(file_dir=self.file_dir, code=i), index_col='日期', parse_dates=True,
+                df_csv = pd.read_csv('{file_dir}/{code}.csv'.format(file_dir=self.file_dir, code=i), index_col='日期',
+                                     parse_dates=True,
                                      na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
 
                 try:
@@ -84,8 +83,5 @@ class save_stockdata_mysql(object):
                 # print(e)
                 self.error_code.append(i)
 
-        # print(self.error_code)
+        print(self.error_code)
 
-
-# test = save_stockdata_mysql('daily')
-# test.run()
