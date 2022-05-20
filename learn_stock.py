@@ -153,10 +153,10 @@ class StockData(object):
     def error_stock_code(self):
         if len(self.error_getcode_list) > 0:
             error_get_stock_code = pd.DataFrame({"save_error_stock_code": self.error_getcode_list})
-            error_get_stock_code.to_csv("./log/error_get_stock_code.csv")
+            error_get_stock_code.to_csv("./log/error_get_stock_code_{period}.csv".format(period=self.period))
         if len(self.error_writecode_list) > 0:
             error_write_stock_code = pd.DataFrame({"error_write_stock_code": self.error_writecode_list})
-            error_write_stock_code.to_csv("./log/error_write_stock_code.csv")
+            error_write_stock_code.to_csv("./log/error_write_stock_code_{period}.csv".format(period=self.period))
 
 
 # period='daily'; choice of {'daily', 'weekly', 'monthly'}
