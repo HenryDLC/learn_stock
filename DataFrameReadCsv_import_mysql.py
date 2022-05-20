@@ -10,10 +10,15 @@ class save_stockdata_mysql(object):
         self.date = date
         self.error_code = []
 
-        stock_daily_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_daily?charset=utf8mb4')
-        stock_weekly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_weekly?charset=utf8mb4')
-        stock_monthly_conn = create_engine(
-            'mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
+        # stock_daily_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_daily?charset=utf8mb4')
+        # stock_weekly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_weekly?charset=utf8mb4')
+        # stock_monthly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
+
+
+        stock_daily_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_daily?charset=utf8mb4')
+        stock_weekly_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_weekly?charset=utf8mb4')
+        stock_monthly_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_monthly?charset=utf8mb4')
+
 
         file_dir_daily = './stock_data/daily'
         file_dir_weekly = './stock_data/weekly'
@@ -46,7 +51,7 @@ class save_stockdata_mysql(object):
             self.file_dir = file_dir_weekly
         elif self.date == 'monthly':
             self.file_dir = file_dir_monthly
-            self.engine = stock_weekly_conn
+            self.engine = stock_monthly_conn
             self.os_code_list = os_code_list_monthly
             self.file_dir = file_dir_monthly
         # 今日日期
@@ -55,7 +60,7 @@ class save_stockdata_mysql(object):
     def run(self):
         for i in self.os_code_list:
             try:
-                df_csv = pd.read_csv('./stock_data/daily/{}.csv'.format(i), index_col='日期', parse_dates=True,
+                df_csv = pd.read_csv('{file_dir}/{code}.csv'.format(file_dir=self.file_dir, code=i), index_col='日期', parse_dates=True,
                                      na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
 
                 try:
@@ -66,7 +71,7 @@ class save_stockdata_mysql(object):
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df_sql_data) - datetime.timedelta(days=1))[16:26].replace("-", "")
                     if df_sql_data.size == 0:
-                        raise BaseException("df_sql_date_zero")
+                        raise Exception("df_sql_date_zero")
                     if bool(self.today > df_sql_data):
                         df_csv[update_date::].to_sql(str(i), con=self.engine, if_exists='append')
 
@@ -82,5 +87,5 @@ class save_stockdata_mysql(object):
         # print(self.error_code)
 
 
-test = save_stockdata_mysql('daily')
-test.run()
+# test = save_stockdata_mysql('daily')
+# test.run()

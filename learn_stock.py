@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import akshare as ak
 import datetime
@@ -6,8 +8,9 @@ from DataFrameReadCsv_import_mysql import save_stockdata_mysql
 from time import sleep
 
 # 今日日期
-today = '20' + str(datetime.date.today().strftime('%y%m%d'))
-
+# today = '20' + str(datetime.date.today().strftime('%y%m%d'))
+# 测试变量 当今时间
+today = '20200930'
 file_dir_daily = './stock_data/daily'
 file_dir_weekly = './stock_data/weekly'
 file_dir_monthly = './stock_data/monthly'
@@ -29,20 +32,23 @@ class StockData(object):
         os_code_list_monthly = []
         for root, dirs, files in os.walk(file_dir_daily, topdown=False):
             for file in files:
-                os_code_list_daily.append(file[:6])
+                if file != '.DS_Store' and file != '.gitkeep':
+                    os_code_list_daily.append(file[:6])
 
         for root, dirs, files in os.walk(file_dir_weekly, topdown=False):
             for file in files:
-                os_code_list_weekly.append(file[:6])
+                if file != '.DS_Store' and file != '.gitkeep':
+                    os_code_list_weekly.append(file[:6])
 
         for root, dirs, files in os.walk(file_dir_monthly, topdown=False):
             for file in files:
-                os_code_list_monthly.append(file[:6])
+                if file != '.DS_Store' and file != '.gitkeep':
+                    os_code_list_monthly.append(file[:6])
 
         daily_local_stock = list(set(chinese_stock_code).difference(set(os_code_list_daily)))
         weekly_local_stock = list(set(chinese_stock_code).difference(set(os_code_list_weekly)))
         monthly_local_stock = list(set(chinese_stock_code).difference(set(os_code_list_monthly)))
-        return daily_local_stock, weekly_local_stock, monthly_local_stock
+        return daily_local_stock, weekly_local_stock, monthly_local_stock, os_code_list_daily, os_code_list_weekly, os_code_list_monthly
 
     # 股票当前信息
     def stock_info(self):
@@ -54,13 +60,12 @@ class StockData(object):
         return [str(x) for x in list(stock_info['代码'])]
 
     # 个股历史行情
-    def stock_data_info(self, start_date, end_date, symbol, header):
+    def stock_data_info(self, start_date, end_date, symbol, header, role=0):
         try:
             if self.period in ['daily', 'weekly', 'monthly']:
                 stock_data = ak.stock_zh_a_hist(symbol, self.period, start_date, end_date, self.adjust)
-                if self.save == "True":
+                if self.save == "True" and role == 0:
                     self.save_data_csv(symbol, stock_data, header)
-
                 return symbol, stock_data
 
         except Exception as e:
@@ -82,10 +87,11 @@ class StockData(object):
                         index_col='日期', parse_dates=True,
                         na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
                     # 更新起止时间
-                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
-
+                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:26].replace("-", "")
+                    if df.index.size == 0:
+                        raise Exception("df_sql_date_zero")
                     if today > df.index:
-                        stock_data = self.stock_data_info(update_date, today, symbol, header=True)
+                        _, stock_data = self.stock_data_info(update_date, today, symbol, header=True, role=1)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
                         stock_data.to_csv(
@@ -102,17 +108,17 @@ class StockData(object):
                         index_col='日期', parse_dates=True,
                         na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
                     # 更新起止时间
-                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
-
+                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:26].replace("-", "")
+                    if df.index.size == 0:
+                        raise Exception("df_sql_date_zero")
                     if today > df.index:
-                        stock_data = self.stock_data_info(update_date, today, symbol, header=True)
+                        _, stock_data = self.stock_data_info(update_date, today, symbol, header=True, role=1)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
-                        # stock_data = pd.concat([df, stock_data])
                         stock_data.to_csv(
                             file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                             mode='a', header=False, index=True)
-                except:
+                except Exception as e:
                     stock_data.to_csv(
                         file_dir_weekly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                         mode='a', header=True, index=False)
@@ -124,19 +130,17 @@ class StockData(object):
                         index_col='日期', parse_dates=True,
                         na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
                     # 更新起止时间
-                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
-
+                    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:26].replace("-", "")
+                    if df.index.size == 0:
+                        raise Exception("df_sql_date_zero")
                     if today > df.index:
-                        stock_data = self.stock_data_info(update_date, today, symbol, header=True)
+                        _, stock_data = self.stock_data_info(update_date, today, symbol, header=True, role=1)
                         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
                         stock_data.set_index(['日期'], inplace=True)
-                        # stock_data = pd.concat([df, stock_data])
                         stock_data.to_csv(
                             file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                             mode='a', header=False, index=True)
-                except:
-                    # df = ak.stock_zh_a_hist('000001', 'daily', '19000101', today, adjust='')
-                    # df = self.stock_data_info('19000101', today, symbol, header=True)
+                except Exception as e:
                     stock_data.to_csv(
                         file_dir_monthly + '/{symbol}_{period}.csv'.format(symbol=symbol, period=self.period),
                         mode='a', header=True, index=False)
@@ -169,12 +173,20 @@ if __name__ == '__main__':
     for i in date:
         stock = StockData(period=i, save='True')
         # A股市场代码
-        chinese_stock_code = stock.stock_code_list()
+        # chinese_stock_code = stock.stock_code_list()
+        # 临时测试变量
+        # A股市场代码
+        update_chinese_stock_code = []
+        # # A股市场代码+更新代码
+        chinese_stock_code = ['603717', '300931', '600039', '002072', '000502', '300737', '601116', '002985',
+                              '002111', '600797', '002922', '000710', '600797','600008', '300537']
+        # 不可获得股票代码
+        error_stock_code = ['688120', '688287']
 
 
         # 本地没有的股票数据
         def get_no_local_stock_code():
-            daily_local_stock_code, weekly_local_stock_code, monthly_local_stock_code = stock.local_stock_code(
+            daily_local_stock_code, weekly_local_stock_code, monthly_local_stock_code, _, _, _ = stock.local_stock_code(
                 chinese_stock_code)
 
             no_local_stock_code = []
@@ -185,7 +197,6 @@ if __name__ == '__main__':
             elif i == 'monthly':
                 no_local_stock_code = monthly_local_stock_code
 
-            # print(list(set(no_local_stock_code).difference(chinese_stock_code)))
             return no_local_stock_code
 
 
@@ -220,8 +231,18 @@ if __name__ == '__main__':
 
         # 获取更新数据
         def get_update_stock():
-            no_local_stock_code = get_no_local_stock_code()
-            if no_local_stock_code == chinese_stock_code:
+            _, _, _, os_code_list_daily, os_code_list_weekly, os_code_list_monthly = stock.local_stock_code(
+                chinese_stock_code)
+
+            local_stock_code = []
+            if i == 'daily':
+                local_stock_code = os_code_list_daily
+            elif i == 'weekly':
+                local_stock_code = os_code_list_weekly
+            elif i == 'monthly':
+                local_stock_code = os_code_list_monthly
+
+            if set(local_stock_code) == set(chinese_stock_code):
                 for code in chinese_stock_code:
                     stock.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
                                           header=True)
@@ -230,10 +251,11 @@ if __name__ == '__main__':
                 get_new_stock()
 
 
+        #
         get_new_stock()
         get_update_stock()
 
-        stock.error_stock_code()
+        # stock.error_stock_code()
         del stock
 
         # 保存到数据库
