@@ -7,20 +7,29 @@ import akshare as ak
 import pymysql
 
 today = '20' + str(datetime.date.today().strftime('%y%m%d'))
-try:
-    df = pd.read_csv('./stock_data/daily/688327_daily.csv', index_col='日期', parse_dates=True,
-                     na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
-    # 更新起止时间
-    update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
+# try:
+#     df = pd.read_csv('./stock_data/daily/688327_daily.csv', index_col='日期', parse_dates=True,
+#                      na_values=['nan', 'Nan', 'NaN', 'NaT', '', '']).tail(1)
+#     # 更新起止时间
+#     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:27].replace("-", "")
 
-    if today > df.index:
-        stock_data = ak.stock_zh_a_hist('688327', 'daily', update_date, today, adjust='')
-        stock_data['日期'] = pd.to_datetime(stock_data['日期'])
-        stock_data.set_index(['日期'], inplace=True)
-        stock_data.to_csv('./stock_data/daily/688327_daily.csv', mode='a', header=False, index=True)
-except:
-    df = ak.stock_zh_a_hist('688327', 'daily', '19000101', today, adjust='')
-    df.to_csv('./stock_data/daily/688327_daily.csv', mode='a', header=True, index=False)
-print(ak.stock_zh_a_spot_em())
+#     if today > df.index:
+#         stock_data = ak.stock_zh_a_hist('688327', 'daily', update_date, today, adjust='')
+#         stock_data['日期'] = pd.to_datetime(stock_data['日期'])
+#         stock_data.set_index(['日期'], inplace=True)
+#         stock_data.to_csv('./stock_data/daily/688327_daily.csv', mode='a', header=False, index=True)
+# except:
+#     df = ak.stock_zh_a_hist('688327', 'daily', '19000101', today, adjust='')
+#     df.to_csv('./stock_data/daily/688327_daily.csv', mode='a', header=True, index=False)
+# print(ak.stock_zh_a_spot_em())
 
 
+df_sql = pd.read_csv('./stock_data/daily/000001_daily.csv', index_col='日期', parse_dates=True,
+                             na_values=['nan', 'Nan', 'NaN', 'NaT', '', ''])
+df_sql_data = df_sql.tail(1)
+print(pd.to_datetime(df_sql_data.index))
+update_date = str(pd.to_datetime(df_sql_data.index) - datetime.timedelta(days=1))[16:26].replace("-", "")
+
+print(update_date)
+print(df_sql[update_date::])
+print(update_date > )

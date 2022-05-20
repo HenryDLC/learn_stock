@@ -237,5 +237,5 @@ if __name__ == '__main__':
         del stock
 
         # 保存到数据库
-        # save_stockdata_mysql(i).run()
+        save_stockdata_mysql(i).run()
         # del stock
