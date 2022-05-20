@@ -8,9 +8,9 @@ from DataFrameReadCsv_import_mysql import save_stockdata_mysql
 from time import sleep
 
 # 今日日期
-# today = '20' + str(datetime.date.today().strftime('%y%m%d'))
+today = '20' + str(datetime.date.today().strftime('%y%m%d'))
 # 测试变量 当今时间
-today = '20200930'
+# today = '20200930'
 file_dir_daily = './stock_data/daily'
 file_dir_weekly = './stock_data/weekly'
 file_dir_monthly = './stock_data/monthly'
@@ -173,16 +173,17 @@ if __name__ == '__main__':
     for i in date:
         stock = StockData(period=i, save='True')
         # A股市场代码
-        # chinese_stock_code = stock.stock_code_list()
+        chinese_stock_code = stock.stock_code_list()
+
+
         # 临时测试变量
         # A股市场代码
-        update_chinese_stock_code = []
-        # # A股市场代码+更新代码
-        chinese_stock_code = ['603717', '300931', '600039', '002072', '000502', '300737', '601116', '002985',
-                              '002111', '600797', '002922', '000710', '600797','600008', '300537']
-        # 不可获得股票代码
-        error_stock_code = ['688120', '688287']
-
+        # update_chinese_stock_code = []
+        # # # A股市场代码+更新代码
+        # chinese_stock_code = ['603717', '300931', '600039', '002072', '000502', '300737', '601116', '002985',
+        #                       '002111', '600797', '002922', '000710', '600797','600008', '300537']
+        # # 不可获得股票代码
+        # error_stock_code = ['688120', '688287']
 
         # 本地没有的股票数据
         def get_no_local_stock_code():
