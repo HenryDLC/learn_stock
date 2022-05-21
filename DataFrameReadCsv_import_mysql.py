@@ -11,7 +11,8 @@ class save_stockdata_mysql(object):
 
         # stock_daily_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_daily?charset=utf8mb4')
         # stock_weekly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_weekly?charset=utf8mb4')
-        # stock_monthly_conn = create_engine('mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
+        # stock_monthly_conn = create_engine(
+        #     'mysql+pymysql://root:123456@82.156.26.93:3306/stock_monthly?charset=utf8mb4')
 
         stock_daily_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_daily?charset=utf8mb4')
         stock_weekly_conn = create_engine('mysql+pymysql://root:707116148@localhost:3306/stock_weekly?charset=utf8mb4')
@@ -27,15 +28,18 @@ class save_stockdata_mysql(object):
         os_code_list_monthly = []
         for root, dirs, files in os.walk(file_dir_daily, topdown=False):
             for file in files:
-                os_code_list_daily.append(file[:12])
+                if file != '.DS_Store' and file != '.gitkeep':
+                    os_code_list_daily.append(file[:12])
 
         for root, dirs, files in os.walk(file_dir_weekly, topdown=False):
             for file in files:
-                os_code_list_weekly.append(file[:13])
+                if file != '.DS_Store' and file != '.gitkeep':
+                    os_code_list_weekly.append(file[:13])
 
         for root, dirs, files in os.walk(file_dir_monthly, topdown=False):
             for file in files:
-                os_code_list_monthly.append(file[:14])
+                if file != '.DS_Store' and file != '.gitkeep':
+                    os_code_list_monthly.append(file[:14])
 
         if self.date == 'daily':
             self.file_dir = file_dir_daily
@@ -57,6 +61,7 @@ class save_stockdata_mysql(object):
 
     def run(self):
         for i in self.os_code_list:
+            print("处理开始：", str(i))
             try:
                 df_csv = pd.read_csv('{file_dir}/{code}.csv'.format(file_dir=self.file_dir, code=i), index_col='日期',
                                      parse_dates=True,
@@ -75,13 +80,12 @@ class save_stockdata_mysql(object):
                         df_csv[update_date::].to_sql(str(i), con=self.engine, if_exists='append')
 
                 except Exception as e:
-                    print(e)
+                    print('存储', e)
                     df_csv.to_sql(str(i), con=self.engine, if_exists='replace')
 
                 print('Write to MySQL successfully: ', i)
             except Exception as e:
-                # print(e)
+                print('读取csv：', e)
                 self.error_code.append(i)
 
-        print(self.error_code)
-
+        print('处理error' + str(self.error_code))

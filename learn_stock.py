@@ -185,8 +185,9 @@ if __name__ == '__main__':
         # # 不可获得股票代码
         # error_stock_code = ['688120', '688287']
 
-        # 本地没有的股票数据
-        def get_no_local_stock_code():
+        # 获取新股票数据
+        def get_new_stock():
+            # 本地没有的股票数据
             daily_local_stock_code, weekly_local_stock_code, monthly_local_stock_code, _, _, _ = stock.local_stock_code(
                 chinese_stock_code)
 
@@ -197,13 +198,8 @@ if __name__ == '__main__':
                 no_local_stock_code = weekly_local_stock_code
             elif i == 'monthly':
                 no_local_stock_code = monthly_local_stock_code
+            print("no_local_stock_code：", no_local_stock_code)
 
-            return no_local_stock_code
-
-
-        # 获取新股票数据
-        def get_new_stock():
-            no_local_stock_code = get_no_local_stock_code()
             for code in no_local_stock_code:
                 stock.stock_data_info(symbol='{code}'.format(code=code), start_date='19890101', end_date=today,
                                       header=True)
@@ -222,6 +218,7 @@ if __name__ == '__main__':
             elif i == 'monthly':
                 local_stock_code = os_code_list_monthly
 
+            # 本地的代码和A股市场代码相同，说明股票数据表是全的，更新数据表里的数据就好，否则需要建立数据表
             if set(local_stock_code) == set(chinese_stock_code):
                 for code in chinese_stock_code:
                     stock.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
@@ -229,16 +226,22 @@ if __name__ == '__main__':
             else:
                 get_new_stock()
 
+        # TODO 执行顺序没有问题 二次更新 不是增量更新 也不是增量更新 而是 新建更新
+        # print("*" * 1000)
+        # print('运行在：：', i)
+        # get_new_stock()
+        # get_update_stock()
+        # stock.error_stock_code()
+        # print(i, '：运行结束')
+        # print("*" * 1000)
 
-        get_new_stock()
-        get_update_stock()
-        stock.error_stock_code()
+
+        # TODO 存在重复添加问题，需要查重处理
+        # 保存到数据库
+        print("*" * 1000)
+        print('运行在：：', i)
+        save_stockdata_mysql(i).run()
+        print(i, '：运行结束')
+        print("*" * 1000)
         del stock
 
-        # 保存到数据库
-        save_stockdata_mysql(i).run()
-        # del stock
-
-# TODO 多线程版本
-# TODO 记录log日志 定位错误
-# TODO 除虫 代码封装完整，解耦
