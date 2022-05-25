@@ -50,14 +50,19 @@ class StockData(object):
     # 个股历史行情
     def stock_data_info(self, start_date, end_date, symbol, header, role=0):
         try:
+
             if self.period in ['daily', 'weekly', 'monthly']:
+
                 stock_data = ak.stock_zh_a_hist(symbol, self.period, start_date, end_date, self.adjust)
                 if self.save == "True" and role == 0:
+
                     self.save_data_csv(symbol, stock_data, header)
+
                 return symbol, stock_data
 
         except Exception as e:
             # print('-' * 100)
+
             self.error_getcode_list.append(symbol)
             # print(symbol)
             # print("股票数据获取失败")
@@ -77,6 +82,7 @@ class StockData(object):
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:26].replace("-", "")
                     if df.index.size == 0:
+                        print(df)
                         raise Exception("df_sql_date_zero")
                     if today > df.index:
                         _, stock_data = self.stock_data_info(update_date, today, symbol, header=True, role=1)
@@ -98,6 +104,7 @@ class StockData(object):
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:26].replace("-", "")
                     if df.index.size == 0:
+                        print(df)
                         raise Exception("df_sql_date_zero")
                     if today > df.index:
                         _, stock_data = self.stock_data_info(update_date, today, symbol, header=True, role=1)
@@ -120,6 +127,7 @@ class StockData(object):
                     # 更新起止时间
                     update_date = str(pd.to_datetime(df.index) + datetime.timedelta(days=1))[16:26].replace("-", "")
                     if df.index.size == 0:
+                        print(df)
                         raise Exception("df_sql_date_zero")
                     if today > df.index:
                         _, stock_data = self.stock_data_info(update_date, today, symbol, header=True, role=1)
@@ -163,9 +171,10 @@ class StockData(object):
 
     # 获取更新数据
     def get_update_stock(self):
+        print(1)
         _, _, _, os_code_list_daily, os_code_list_weekly, os_code_list_monthly = self.local_stock_code(
             chinese_stock_code)
-
+        print(2)
         local_stock_code = []
         if i == 'daily':
             local_stock_code = os_code_list_daily
@@ -173,18 +182,24 @@ class StockData(object):
             local_stock_code = os_code_list_weekly
         elif i == 'monthly':
             local_stock_code = os_code_list_monthly
-
+        print(3)
         # 本地的代码和A股市场代码相同，说明股票数据表是全的，更新数据表里的数据就好，否则需要建立数据表
         if set(local_stock_code) == set(chinese_stock_code):
             for code in chinese_stock_code:
                 self.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
                                      header=True)
         else:
+            print(4)
             self.get_new_stock()
             # 目前接口有问题，存在几只股票无法获取数据
-            for code in chinese_stock_code:
+            print(5)
+            print(local_stock_code)
+            for code in local_stock_code:
+                print(code)
+                print(today)
                 self.stock_data_info(symbol='{code}'.format(code=code), start_date=today, end_date=today,
                                      header=True)
+
 
     def error_stock_code(self):
         if len(self.error_getcode_list) > 0:
@@ -208,8 +223,8 @@ if __name__ == '__main__':
     file_dir_monthly = './stock_data/monthly'
 
     # 获取股票数据
-    # date = ['daily', 'weekly', 'monthly']
-    date = ['monthly']
+    date = ['daily', 'weekly', 'monthly']
+    # date = ['monthly']
 
     for i in date:
         stock = StockData(period=i, save='True')
@@ -226,9 +241,17 @@ if __name__ == '__main__':
 
         # print("*" * 1000)
         # print('运行在：：', i)
+        print(i, ' :get_new_stock—start_datet')
         stock.get_new_stock()
+        print(i, ' :get_new_stock——end')
+
+        print(i, ' :get_update_stock—start')
         stock.get_update_stock()
+        print(i, ' :get_update_stock—end')
+
+        print(i, ' :error_stock_code—start')
         stock.error_stock_code()
+        print(i, ' :error_stock_code—end')
         # print(i, '：运行结束')
         # print("*" * 1000)
 
